@@ -3,7 +3,7 @@ from threading import Thread
 import logging
 from sys import stdout
 
-from easy_mornings_server.lightmanager import LightManager
+from .lightmanager import LightManager
 from .lightcontroller import LightController
 from .webserver import WebServer
 

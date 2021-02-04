@@ -75,7 +75,7 @@ class LightManager:
         while True:
             time.sleep(sleep_time)
             if self.run_timestep():
-                sleep_time = 0.1
+                sleep_time = 0.01
             else:
                 sleep_time = min(sleep_time * 2, 2)
 
