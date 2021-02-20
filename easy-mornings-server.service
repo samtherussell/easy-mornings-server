@@ -1,0 +1,11 @@
+[Unit]
+Description=easy-mornings-server
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/python3 -m easy_mornings_server
+Restart=always
+User=pi
+
+[Install]
+WantedBy=multi-user.target
