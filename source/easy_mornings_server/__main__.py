@@ -3,6 +3,8 @@ from threading import Thread
 import logging
 from sys import stdout
 
+import pigpio
+
 from .lightmanager import LightManager
 from .lightcontroller import LightController
 from .webserver import WebServer
@@ -25,7 +27,8 @@ def run(verbose=None):
     else:
         log.setLevel(logging.WARNING)
 
-    light_controller = LightController()
+    gpio = pigpio.pi()
+    light_controller = LightController(gpio)
     light_manager = LightManager(light_controller)
 
     light_manager_thread = Thread(target=light_manager.run)

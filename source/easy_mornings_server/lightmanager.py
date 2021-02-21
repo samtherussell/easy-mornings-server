@@ -48,9 +48,10 @@ class LightManager:
         self.light_controller = light_controller
         self.state = LightState.off()
 
-    def on(self):
+    def on(self, level: float):
+        level = level or 1
         self.state = LightState.on()
-        self.light_controller.set_level(1)
+        self.light_controller.set_level(level)
 
     def off(self):
         self.state = LightState.off()
