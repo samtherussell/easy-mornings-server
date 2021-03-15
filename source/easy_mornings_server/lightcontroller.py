@@ -31,5 +31,3 @@ class LightController:
             value = round(percentage * percentage * PWM_RANGE)
             self.gpio.set_PWM_dutycycle(PIN, value)
 
-    def get_level(self):
-        return self.level

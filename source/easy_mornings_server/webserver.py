@@ -7,6 +7,13 @@ class WebServer:
     def __init__(self, light_manager: LightManager):
         app = Bottle()
 
+        @app.post('/now')
+        def set_now():
+            level = request.query.level
+            level = float(level) if level else None
+            light_manager.set_level(level)
+            return {'success': True}
+
         @app.post('/on')
         def on():
             level = request.query.level
@@ -19,10 +26,12 @@ class WebServer:
             light_manager.off()
             return {'success': True}
 
-        @app.post('/on-timer')
-        def on_timer():
+        @app.post('/fade')
+        def fade():
+            level = request.query.level
+            level = float(level) if level else None
             period = int(request.query.seconds)
-            light_manager.on_timed(period)
+            light_manager.fade(level, period)
             return {'success': True}
 
         @app.post('/fade-on')
@@ -40,7 +49,7 @@ class WebServer:
         @app.get('/status')
         def get_status():
             state = light_manager.state.state
-            level = light_manager.light_controller.get_level()
+            level = light_manager.level
             return {
                 'state': state,
                 'level': level,
