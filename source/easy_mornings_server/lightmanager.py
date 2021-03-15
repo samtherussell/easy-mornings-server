@@ -5,7 +5,7 @@ from easy_mornings_server.lightcontroller import LightController
 
 log = logging.getLogger(__name__)
 
-LIGHT_STATE_INDEFINITE = 'LIGHT_STATE_INDEFINITE'
+LIGHT_STATE_CONSTANT = 'LIGHT_STATE_CONSTANT'
 LIGHT_STATE_FADING = 'LIGHT_STATE_FADING'
 
 
@@ -17,7 +17,7 @@ class LightState:
 
     @classmethod
     def constant(cls):
-        return cls(LIGHT_STATE_INDEFINITE)
+        return cls(LIGHT_STATE_CONSTANT)
 
 
 class FadingLightState(LightState):
