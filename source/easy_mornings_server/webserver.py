@@ -34,9 +34,11 @@ class WebServer:
         def get_status():
             state = light_manager.state.state
             level = light_manager.level
+            time_left = light_manager.state.time_left()
             return {
                 'state': state,
                 'level': level,
+                'time_left': time_left,
             }
 
         run(app, host='0.0.0.0', port=8080)

@@ -15,32 +15,29 @@ LIGHT_STATE_TIMER = 'LIGHT_STATE_TIMER'
 @attrs
 class LightState:
     state = attrib()
+    end_time = attrib(default=None)
+    end_level = attrib(default=None)
+    start_time = attrib(default=None)
+    start_level = attrib(default=None)
 
     @classmethod
     def constant(cls):
         return cls(LIGHT_STATE_CONSTANT)
 
-
-@attrs
-class FadingLightState(LightState):
-    start_time = attrib()
-    start_level = attrib()
-    end_time = attrib()
-    end_level = attrib()
-
     @classmethod
     def fading(cls, start_time, start_level, end_time, end_level):
-        return cls(LIGHT_STATE_FADING, start_time, start_level, end_time, end_level)
-
-
-@attrs
-class TimedLightState(LightState):
-    end_time = attrib()
-    end_level = attrib()
+        return cls(LIGHT_STATE_FADING, end_time, end_level, start_time, start_level)
 
     @classmethod
     def timed(cls, end_time, end_level):
         return cls(LIGHT_STATE_TIMER, end_time, end_level)
+
+    def time_left(self):
+        if self.end_time is None:
+            return -1
+        else:
+            now_time = milli(datetime.now().time())
+            return (self.end_time - now_time) // 1000
 
 
 class LightManager:
@@ -63,12 +60,12 @@ class LightManager:
         now_time = milli(datetime.now().time())
         now_level = self.level
         then_time = now_time + period * 1000
-        self.state = FadingLightState.fading(now_time, now_level, then_time, level)
+        self.state = LightState.fading(now_time, now_level, then_time, level)
 
     def timer(self, period: int, level: float):
         now_time = milli(datetime.now().time())
         then_time = now_time + period * 1000
-        self.state = TimedLightState.timed(then_time, level)
+        self.state = LightState.timed(then_time, level)
 
     def run(self):
         log.debug("Light Manager is running")
