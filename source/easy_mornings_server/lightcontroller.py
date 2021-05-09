@@ -4,7 +4,7 @@ import pigpio
 log = logging.getLogger(__name__)
 
 PIN = 18
-PWM_RANGE = 256
+PWM_RANGE = 255
 
 
 class LightController:
@@ -28,6 +28,6 @@ class LightController:
         elif percentage == 0:
             self.gpio.write(PIN, 0)
         else:
-            value = round(percentage * percentage * PWM_RANGE)
+            value = 2 + round(percentage * percentage * (PWM_RANGE-2))
             self.gpio.set_PWM_dutycycle(PIN, value)
 

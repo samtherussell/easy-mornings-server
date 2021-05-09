@@ -14,36 +14,20 @@ class WebServer:
             light_manager.set_level(level)
             return {'success': True}
 
-        @app.post('/on')
-        def on():
-            level = request.query.level
-            level = float(level) if level else None
-            light_manager.on(level)
-            return {'success': True}
-
-        @app.post('/off')
-        def off():
-            light_manager.off()
-            return {'success': True}
-
         @app.post('/fade')
         def fade():
             level = request.query.level
             level = float(level) if level else None
             period = int(request.query.seconds)
-            light_manager.fade(level, period)
+            light_manager.fade(period, level)
             return {'success': True}
 
-        @app.post('/fade-on')
-        def fade_on():
+        @app.post('/timer')
+        def timer():
+            level = request.query.level
+            level = float(level) if level else None
             period = int(request.query.seconds)
-            light_manager.fade_on(period)
-            return {'success': True}
-
-        @app.post('/fade-off')
-        def fade_off():
-            period = int(request.query.seconds)
-            light_manager.fade_off(period)
+            light_manager.timer(period, level)
             return {'success': True}
 
         @app.get('/status')
