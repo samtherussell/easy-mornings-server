@@ -16,12 +16,13 @@
 ## install
 
 ```
-apt install pigpio
+sudo apt install pigpio
 sudo pigpiod
-sudo echo "sudo pigpiod" >> /etc/rc.local
+sudo nano /etc/rc.local
+# add "sudo pigpiod"
 
-apt install python3-pip
-apt install git
+sudo apt install python3-pip
+sudo apt install git
 
 pip3 install git+https://github.com/samtherussell/easy-mornings-server.git
 
