@@ -1,9 +1,6 @@
 import unittest
-from threading import Thread
 
-from easy_mornings_server.lightcontroller import LightController
-from easy_mornings_server.lightmanager import LightManager
-from easy_mornings_server.webserver import WebServer
+from easy_mornings_server.__main__ import run
 
 
 class Test(unittest.TestCase):
@@ -21,10 +18,4 @@ class Test(unittest.TestCase):
                 print(f"called set_PWM_dutycycle({pin}, {val})")
 
         mock_gpio = MockGPIO()
-        light_controller = LightController(mock_gpio)
-        light_manager = LightManager(light_controller)
-
-        light_manager_thread = Thread(target=light_manager.run)
-        light_manager_thread.start()
-
-        WebServer(light_manager)
+        run(mock_gpio, verbose=True)

@@ -1,4 +1,5 @@
 import argparse
+import time
 from threading import Thread
 import logging
 from sys import stdout
@@ -16,10 +17,11 @@ def main():
     arg_parser = argparse.ArgumentParser()
     arg_parser.add_argument('--verbose', '-v', action='store_true')
     args = arg_parser.parse_args()
-    run(args.verbose)
+    gpio = pigpio.pi()
+    run(gpio, args.verbose)
 
 
-def run(verbose=None):
+def run(gpio, verbose=None):
 
     log.addHandler(logging.StreamHandler(stdout))
     if verbose:
@@ -27,14 +29,30 @@ def run(verbose=None):
     else:
         log.setLevel(logging.WARNING)
 
-    gpio = pigpio.pi()
     light_controller = LightController(gpio)
     light_manager = LightManager(light_controller)
 
-    light_manager_thread = Thread(target=light_manager.run)
-    light_manager_thread.start()
+    def start_light_manager():
+        thread = Thread(target=light_manager.run)
+        thread.daemon = True
+        thread.start()
+        return thread
 
-    WebServer(light_manager)
+    def start_web_server():
+        thread = Thread(target=WebServer, args=(light_manager,))
+        thread.daemon = True
+        thread.start()
+        return thread
+
+    light_manager_thread = start_light_manager()
+    web_server_thread = start_web_server()
+
+    while True:
+        if not light_manager_thread.is_alive():
+            light_manager_thread = start_light_manager()
+        if not web_server_thread.is_alive():
+            web_server_thread = start_web_server()
+        time.sleep(10)
 
 
 if __name__ == '__main__':
