@@ -10,7 +10,7 @@ log = logging.getLogger(__name__)
 LIGHT_STATE_CONSTANT = 'LIGHT_STATE_CONSTANT'
 LIGHT_STATE_FADING = 'LIGHT_STATE_FADING'
 LIGHT_STATE_TIMER = 'LIGHT_STATE_TIMER'
-LIGHT_STATE_PARTY = 'LIGHT_STATE_PARTY'
+LIGHT_STATE_RAVE = 'LIGHT_STATE_RAVE'
 
 
 
@@ -42,8 +42,8 @@ class LightState:
             return int(self.end_time - now_time)
 
     @classmethod
-    def party(cls):
-        return cls(LIGHT_STATE_PARTY)
+    def rave(cls):
+        return cls(LIGHT_STATE_RAVE)
 
 
 class ScheduleItem:
@@ -183,8 +183,8 @@ class LightManager:
         end_time = now_time + period
         self.state = LightState.timed(end_time, level)
 
-    def party(self):
-        self.state = LightState.party()
+    def rave(self):
+        self.state = LightState.rave()
 
     def run(self):
         log.debug("Light Manager is running")
@@ -205,8 +205,8 @@ class LightManager:
                     self.fade(item.period, item.level)
                 elif item.state == LIGHT_STATE_TIMER:
                     self.timer(item.period, item.level)
-                elif item.state == LIGHT_STATE_PARTY:
-                    self.party()
+                elif item.state == LIGHT_STATE_RAVE:
+                    self.rave()
 
     def run_timestep(self, now):
 
@@ -215,8 +215,8 @@ class LightManager:
         if self.state.state == LIGHT_STATE_CONSTANT:
             return 2
 
-        if self.state.state == LIGHT_STATE_PARTY:
-            self._set_level(int(now * 10) % 2)
+        if self.state.state == LIGHT_STATE_RAVE:
+            self._set_level(int(now * 5) % 2)
             return 0.1
 
         if self.state.state == LIGHT_STATE_TIMER:

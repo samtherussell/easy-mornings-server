@@ -27,9 +27,9 @@ class WebServer:
             light_manager.timer(period, level)
             return {'success': True}
 
-        @app.post('/party')
+        @app.post('/rave')
         def timer():
-            light_manager.party()
+            light_manager.rave()
             return {'success': True}
 
         @app.get('/status')
