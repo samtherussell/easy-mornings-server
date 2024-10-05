@@ -4,7 +4,7 @@ from threading import Thread
 import logging
 from sys import stdout
 
-DEBUG = True
+DEBUG = False
 if not DEBUG:
     import pigpio
 
