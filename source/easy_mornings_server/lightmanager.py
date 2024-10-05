@@ -92,6 +92,8 @@ class ScheduleItem:
             ret["level"] = self.level
         if self.period is not None:
             ret["period"] = self.period
+        if self.next is not None:
+            ret["next"] = int(self.next.timestamp())
         return ret
 
     def set_next(self, now):
