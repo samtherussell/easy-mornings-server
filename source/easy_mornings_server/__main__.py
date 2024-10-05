@@ -4,7 +4,9 @@ from threading import Thread
 import logging
 from sys import stdout
 
-import pigpio
+DEBUG = True
+if not DEBUG:
+    import pigpio
 
 from .lightmanager import LightManager
 from .lightcontroller import LightController
@@ -13,11 +15,12 @@ from .webserver import WebServer
 log = logging.getLogger("easy_mornings_server")
 
 
+
 def main():
     arg_parser = argparse.ArgumentParser()
     arg_parser.add_argument('--verbose', '-v', action='store_true')
     args = arg_parser.parse_args()
-    gpio = pigpio.pi()
+    gpio = None if DEBUG else pigpio.pi()
     run(gpio, args.verbose)
 
 
