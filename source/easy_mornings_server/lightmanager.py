@@ -1,5 +1,5 @@
 import time
-from datetime import datetime
+from datetime import datetime, timedelta
 import logging
 from attr import attrs, attrib
 
@@ -117,7 +117,9 @@ class ScheduleItem:
         self.next = next
 
     def triggered(self, now):
-        triggered = self.next < now
+        if self.next is None:
+            return False
+        triggered = self.next < now < self.next + timedelta(minutes=1)
         if triggered:
             if not self.repeat:
                 self.enabled = False
